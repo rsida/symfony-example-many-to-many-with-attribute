@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Accessory!{% endblock %}
+
+{% block body %}
+<div class="container">
+    {{ form_start(form) }}
+    <table>
+        <tr>
+            <td>{{ form_label(form.label) }}</td>
+            <td>{{ form_widget(form.label) }}</td>
+            <td>{{ form_errors(form.label) }}</td>
+        </tr>
+        <tr>
+            <td>{{ form_label(form.price) }}</td>
+            <td>{{ form_widget(form.price) }}</td>
+            <td>{{ form_errors(form.price) }}</td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Créer"/></td>
+        </tr>
+    </table>
+    {{ form_end(form) }}
+</div>
+{% endblock %}

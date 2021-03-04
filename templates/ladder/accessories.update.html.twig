@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Update Ladder Accessories{% endblock %}
+
+{% block body %}
+    <div class="container">
+        {{ form_start(form) }}
+        <table>
+            <tr>
+                <td>
+                    <ul class="accessories" data-prototype="{{ form_widget(form.ladderAccessories.vars.prototype)|e('html_attr') }}">
+                        {% for accessory in form.ladderAccessories %}
+                            <li>
+                                <table>
+                                    <tr>
+                                        <td>{{ form_label(accessory.accessory) }}</td>
+                                        <td>{{ form_widget(accessory.accessory) }}</td>
+                                        <td>{{ form_errors(accessory.accessory) }}</td>
+                                    <tr>
+                                    <tr>
+                                        <td>{{ form_label(accessory.quantity) }}</td>
+                                        <td>{{ form_widget(accessory.quantity) }}</td>
+                                        <td>{{ form_errors(accessory.quantity) }}</td>
+                                    <tr>
+                                </table>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td><button type="submit">Créer</button></td>
+                <td><button type="button" class="add_item_link" data-collection-holder-class="accessories">Ajouter Accessoire</button></td>
+            </tr>
+        </table>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function() {
+            const $accessoriessCollectionHolder = $('ul.accessories');
+            $accessoriessCollectionHolder.data('index', $accessoriessCollectionHolder.find('input').length);
+
+            $('body').on('click', '.add_item_link', function(e) {
+                var $accessoriessCollectionHolder = $(e.currentTarget).data('collectionHolderClass');
+                addFormToCollection($accessoriessCollectionHolder);
+            });
+
+            $accessoriessCollectionHolder.find('li').each(function() {
+                addTagFormDeleteLink($(this));
+            });
+        });
+
+        function addFormToCollection($collectionHolderClass) {
+            const $collectionHolder = $('.' + $collectionHolderClass);
+            const prototype = $collectionHolder.data('prototype');
+            const index = $collectionHolder.data('index');
+            let newForm = prototype;
+            newForm = newForm.replace(/__name__/g, index);
+            $collectionHolder.data('index', index + 1);
+            const $newFormLi = $('<li></li>').append(newForm);
+            $collectionHolder.append($newFormLi);
+            addTagFormDeleteLink($newFormLi);
+        }
+
+        function addTagFormDeleteLink($accessoryFormLi) {
+            const $removeFormButton = $('<button type="button">Delete this Accessory</button>');
+            $accessoryFormLi.append($removeFormButton);
+
+            $removeFormButton.on('click', function() {
+                $accessoryFormLi.remove();
+            });
+        }
+    </script>
+{% endblock %}
